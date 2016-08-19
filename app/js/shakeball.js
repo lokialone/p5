@@ -51,4 +51,4 @@ var sketch = function() {
 	}
 }
 
-exports.sketch = sketch();
+exports.sketch = sketch;
