@@ -1,5 +1,4 @@
 var sketch = function() {
-
 	var canvasHeight = 480;
 	var canvasWidth = 640;
 	var ballNumber = 100;
