@@ -18,17 +18,18 @@ const common = {
 	output: {
 		path: PATHS.build
 	},
-	module:{
-		loaders:[
-			{
-				test: /\.js$/,
-				loader:'babel',
-				query: {
-					presets: ['es2015']
-				}
-			}
-		]
-	},
+	// module:{
+	// 	loaders:[
+	// 		{
+	// 			test: /\.js$/,
+	// 			loader:'babel',
+	// 			exclude: /node_modules/,
+	// 			query: {
+	// 				presets: ['es2015']
+	// 			}
+	// 		}
+	// 	]
+	// },
 	plugins: [
 		new HtmlWebpackPlugin({
 		title:'p5 animation'
