@@ -1,7 +1,8 @@
 var bouncing = function() {
 
 	var ball;
-	 setup = function() {
+
+	setup = function() {
 	 	createCanvas(640,480);
 	 	noStroke();
 	 	background(255);
@@ -10,10 +11,12 @@ var bouncing = function() {
 
 	 draw = function() {
 	 	background(255);
-	 	ball.run();
-
+		ball.run();
 	 }
 
+	 /**
+	  * Ball object
+	  */
 	 function Ball() {
 	 	this.x = random(0,width);
 	 	this.y = random(0,height);
@@ -36,7 +39,6 @@ var bouncing = function() {
 	 	if(this.y >= height || this.y <= 0){
 	 		this.dy = -this.dy;
 	 	}
-
 	 }
 
 	 Ball.prototype.render = function() {
