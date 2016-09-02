@@ -84,7 +84,6 @@ var vector_bouncing = function(){
 	 function Ball(){
 	 	this.location = new Location(random(0,width),random(0,height));
 	 	this.vector = new Vector(1,1);
-	 	console.log('location' + this.location.x);
 	 }
 
 	  Ball.prototype.run = function() {
@@ -109,9 +108,6 @@ var vector_bouncing = function(){
 	 	fill(90);
 	 	ellipse(this.location.x,this.location.y,30,30);
 	 }
-
-
-
 }
 
 exports.bouncing = bouncing;
