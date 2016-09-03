@@ -1,32 +1,4 @@
-
-function Vector(x,y) {
-	this.x = x;
-	this.y = y;
-}
-
-Vector.prototype.add = function(vector) {
-	// if(!vector.hasOwnProperty('x') && !vector.hasOwnProperty('y'){
-	// 	return;
-	// }
-	this.x += vector.x;
-	this.y += vector.y;
-}
-
-Vector.prototype.limit = function(speed) {
-
-	this.x = Math.min(this.x,speed);
-	this.y = Math.min(this.y,speed);
-	
-}
-
-Vector.prototype.mag = function() {
-
-	return sqrt(this.x * this.x + this.y * this.y);
-
-}
-Vector.prototype.normalize = function() {
-
-}
+var Vector = require('./Vector');
 
 var acceleration = function() {
 
@@ -43,8 +15,8 @@ var acceleration = function() {
 
 	function Ball(){
 		this.location = new Vector(random(0,width),random(0,height));
-		this.velocity = new Vector(1,1);
-		this.acceleration = new Vector(0.01,0.01);
+		this.velocity = new Vector(0,0);
+		this.acceleration = new Vector(0,0);
  	}
 
 	Ball.prototype.run = function() {
@@ -53,12 +25,24 @@ var acceleration = function() {
 	 }
 
  	Ball.prototype.update = function() {
+
+ 		var mouse = new Vector(mouseX,mouseY);
+ 		var dir  = mouse.sub(this.location);
+
+ 		dir.normalize();
+ 		dir.mult(0.1);
+
+ 		this.acceleration = dir;
  
-	 	this.location.add(this.velocity);
 	 	this.velocity.add(this.acceleration);
 	 	this.velocity.limit(3);
-	  	
-	 	if(this.location.x >= width || this.location.x <= 0){
+	 	this.location.add(this.velocity);
+	 	this.checkEage();
+ 	}
+
+ 	Ball.prototype.checkEage = function() {
+
+ 		if(this.location.x >= width || this.location.x <= 0){
 	 		this.velocity.x = -this.velocity.x;
 	 	}
 	 	if(this.location.y >= height || this.location.y <= 0){
