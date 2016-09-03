@@ -1,33 +1,33 @@
 var Vector = function(x,y) {
 	this.x = x;
 	this.y = y;
-	console.log('test');
 }
 
 Vector.prototype.add = function(vector) {
-	// if(!vector.hasOwnProperty('x') && !vector.hasOwnProperty('y'){
-	// 	return;
-	// }
+	
 	this.x += vector.x;
 	this.y += vector.y;
 }
 
 Vector.prototype.limit = function(speed) {
-
 	this.x = Math.min(this.x,speed);
 	this.y = Math.min(this.y,speed);
 	
 }
 
 Vector.prototype.mag = function() {
-
 	return sqrt(this.x * this.x + this.y * this.y);
 
 }
-Vector.prototype.normalize = function() {
 
+Vector.prototype.normalize = function() {
 	this.x = this.x / this.mag();
-	this.y = this.y /this.mag();
+	this.y = this.y / this.mag();
+}
+
+Vector.prototype.div = function(mass) {
+	this.x = this.x / mass;
+	this.y = this.y / mass;
 }
 
 Vector.prototype.mult = function(rate) {
@@ -35,10 +35,13 @@ Vector.prototype.mult = function(rate) {
 	this.y = this.y * rate;
 }
 
-Vector.prototype.sub = function(vector){
+Vector.prototype.sub =  function(vector) {
+	this.x = this.x - vector.x;
+	this.y = this.y - vector.y;
+}
 
+Vector.prototype.getSubObject = function(vector){
 	return new Vector(this.x - vector.x,this.y - vector.y);
-
 }
 
 module.exports = Vector;

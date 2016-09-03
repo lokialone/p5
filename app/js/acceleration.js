@@ -2,6 +2,7 @@ var Vector = require('./Vector');
 
 var acceleration = function() {
 
+	var ball;
 	setup = function() {
 	 	createCanvas(640,480);
 	 	background(224);
@@ -27,7 +28,7 @@ var acceleration = function() {
  	Ball.prototype.update = function() {
 
  		var mouse = new Vector(mouseX,mouseY);
- 		var dir  = mouse.sub(this.location);
+ 		var dir  = mouse.getSubObject(this.location);
 
  		dir.normalize();
  		dir.mult(0.1);
@@ -56,6 +57,4 @@ var acceleration = function() {
 	 	ellipse(this.location.x,this.location.y,30,30);
  	}
 }
-
-
 exports.acceleration = acceleration;
