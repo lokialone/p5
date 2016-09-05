@@ -21,11 +21,11 @@ var freeFall = function(){
 
 		this.mass = random(10,40);
 		this.location = new Vector(random(10,width),30);
-		this.velocity = new Vector(0.1,0);
-		this.gravity = new Vector(0,0.1);
+		this.velocity = new Vector(0,0.1); //初速度
+		this.gravity = new Vector(0,0.5); //重力
+		
 		this.wind = new Vector(0.01,0);
 		this.acceleration = new Vector(0,0);
-
 		this.gravity.div(this.mass);
 		this.wind.div(this.mass);
 		this.acceleration.add(this.wind);
@@ -36,10 +36,11 @@ var freeFall = function(){
 	 	this.update();
 	 	this.render();
 	 }
-
  	Ball.prototype.update = function() {
 
 	 	this.velocity.add(this.acceleration);
+	
+	 	
 	 	// this.velocity.limit(3);
 	 	this.location.add(this.velocity);
 	 	this.checkEage();
