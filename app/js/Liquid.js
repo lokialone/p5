@@ -8,7 +8,7 @@ var Liquid = function(x,y,w,h,c){
 
 	this.display = function(){
 		noStroke();
-    	fill(175);
+    	fill(133);
     	rect(this.x,this.y,this.w,this.h);
 	}
 
