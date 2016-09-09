@@ -9,4 +9,5 @@ var friction = require('./js/Friction');
 // new p5(ball.bouncing);
 // new p5(ball.vector_bouncing);
 // new p5(acceleration.acceleration);
-new p5(freeFall);
+// new p5(freeFall);
+new p5(friction);

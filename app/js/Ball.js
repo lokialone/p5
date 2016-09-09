@@ -1,8 +1,13 @@
-var Ball = function(){
-		this.mass = 0;
-		this.location = 0;
+var Vector = require('./Vector'); 
+
+var Ball = function(m,x,y,g){
+
+		this.mass = m;
+		this.location = new Vector();
+		this.location.x = x;
+		this.location.y = y;
 		this.velocity = 0; //初速度
-		this.gravity = 0; //重力	
+		this.gravity = g; //重力	
  	}
 
 	Ball.prototype.run = function() {
@@ -32,7 +37,7 @@ var Ball = function(){
 
  	Ball.prototype.render = function() {
 	 	noStroke();
-	 	fill(color(255, 0, 0, 0.2 * 255));
+	 	fill(color(255, 122, 144, 0.2 * 255));
 	 	ellipse(this.location.x,this.location.y,this.mass,this.mass);
  	}
 
