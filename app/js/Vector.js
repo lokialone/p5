@@ -4,7 +4,7 @@ var Vector = function(x,y) {
 }
 
 Vector.prototype.add = function(vector) {
-	
+
 	this.x += vector.x;
 	this.y += vector.y;
 }
@@ -12,7 +12,7 @@ Vector.prototype.add = function(vector) {
 Vector.prototype.limit = function(speed) {
 	this.x = Math.min(this.x,speed);
 	this.y = Math.min(this.y,speed);
-	
+
 }
 
 Vector.prototype.get = function(){

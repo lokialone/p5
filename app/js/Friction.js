@@ -11,7 +11,7 @@ var friction = function() {
 	 	background(224);
 		liquid = new Liquid(0, height/2, width, height/2, 0.1);
 		for(var i = 0; i < 5; i++){
-			cycles[i] = new Cycle(40,60 + i * 120,30,0,0.05);
+			cycles[i] = new Cycle(random(30,60),60 + i * 120,60,0,0.05);
 		}
 
 	}
@@ -37,29 +37,29 @@ var friction = function() {
 		if(this.checkEage()){
 
 		}else{
-
 			this.velocity.add(this.acceleration);
 			this.location.add(this.velocity);
-			this.inside(liquid);	
+			this.inside(liquid);
 		}
-		
-		
+
+
 	}
 
+	Cycle.prototype.drag =  function() {
+
+	}
 
 	Cycle.prototype.inside = function(liquid){
-
-		console.log(liquid.y);
 		if(this.location.y >= liquid.y-this.mass/2){
-			this.velocity.y -= liquid.c*this.velocity.y*this.velocity.y;
+			return true
 		}
+		return false;
 
 	}
 	Cycle.prototype.checkEage = function(){
 		if(this.location.y >= height-this.mass/2){
-			this.velocity.x = 0;
-			this.velocity.y = 0;
-			this.acceleration.y = 0;
+			this.velocity.y = -1 * this.velocity.y;
+			console.log(this.velocity);
 			return true
 		}
 		return false;
@@ -69,7 +69,6 @@ var friction = function() {
 
 
 }
-
 
 
 module.exports = friction;
