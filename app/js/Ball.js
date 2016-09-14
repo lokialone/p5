@@ -1,17 +1,11 @@
-var Vector = require('./Vector'); 
+var Vector = require('./Vector');
 
-var Ball = function(m,x,y,ax,ay){
+var Ball = function(m,x,y){
 
 		this.mass = m;
-		this.location = new Vector();
-		this.velocity = new Vector();
-		this.acceleration  = new Vector();
-		this.location.x = x;
-		this.location.y = y;
-		this.velocity.x = 0;
-		this.velocity.y = 0;
-		this.acceleration.x = ax;
-		this.acceleration.y = ay; //重力	
+		this.location = new Vector(x,y);
+		this.velocity = new Vector(0,0);
+		this.acceleration  = new Vector(0,0);
  	}
 
 	Ball.prototype.run = function() {
@@ -24,6 +18,10 @@ var Ball = function(m,x,y,ax,ay){
 	 	this.checkEage();
  	}
 
+	Ball.prototype.applyForce = function(force){
+		force.div(this.mass);
+		this.acceleration.add(force);
+	}
  	Ball.prototype.checkEage = function() {
 
  		if(this.location.x > width){
