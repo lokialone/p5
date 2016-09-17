@@ -29,7 +29,7 @@ var friction = function() {
 	}
 
 	Cycle.prototype = new Ball();
-	Cycle.prototype.update = function(liquid){
+	Cycle.prototype.update = function(liquid) {
 
 		this.acceleration = new Vector(0,0);
 		var gravity = new Vector(0,0.01*this.mass);
@@ -40,12 +40,8 @@ var friction = function() {
 		this.checkEage();
 		this.velocity.add(this.acceleration);
 		this.location.add(this.velocity);
-
-
 	}
-
 	Cycle.prototype.drag =  function(liquid) {
-
 			var speed = this.velocity.mag();
 			var drag = liquid.c * speed * speed;
 			var dragForce = this.velocity.get();
@@ -54,7 +50,6 @@ var friction = function() {
 			dragForce.mult(drag);
 			this.applyForce(dragForce);
 	}
-
 	Cycle.prototype.inside = function(liquid){
 		if(this.location.y >= liquid.y-this.mass/2){
 			return true
@@ -68,10 +63,6 @@ var friction = function() {
 			this.velocity.mult(-1);
 		}
 	}
-
-
-
 }
-
 
 module.exports = friction;

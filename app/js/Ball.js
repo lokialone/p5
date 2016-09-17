@@ -8,10 +8,6 @@ var Ball = function(m,x,y){
 		this.acceleration  = new Vector(0,0);
  	}
 
-	Ball.prototype.run = function() {
-	 	this.update();
-	 	this.render();
-	 }
  	Ball.prototype.update = function() {
 	 	this.velocity.add(this.acceleration);
 	 	this.location.add(this.velocity);
