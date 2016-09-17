@@ -45,8 +45,6 @@ var Gravitation = function() {
       dir.normalize();
       dir.mult(forceSize);
       return dir;
-
-
     }
 
 }

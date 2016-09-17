@@ -6,10 +6,11 @@ var acceleration = require('./js/acceleration');
 var freeFall = require('./js/freeFall');
 var friction = require('./js/Friction');
 var Gravitation = require('./js/Gravitation');
-
+var Attract = require('./js/Attract');
 // new p5(ball.bouncing);
 // new p5(ball.vector_bouncing);
 // new p5(acceleration.acceleration);
 // new p5(freeFall);
 // new p5(friction);
-new p5(Gravitation);
+// new p5(Gravitation);
+new p5(Attract);
