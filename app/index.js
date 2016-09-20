@@ -14,7 +14,6 @@ var Attract = require('./js/Attract');
 // new p5(friction);
 // new p5(Gravitation);
 // new p5(Attract);
-
 var wawa = {};
 wawa.Router = function(){
   function Router(){
@@ -34,6 +33,7 @@ wawa.Router = function(){
   Router.prototype.start = function(){
     console.log(window.location.hash);
     var hash = location.hash, route, matchResult;
+    console.log(hash);
     for (var routeIndex in this.routemap){
       route = this.routemap[routeIndex];
       matchResult = hash.match(route.rule);
@@ -50,7 +50,6 @@ var router = new wawa.Router();
 router.setup({
   '#/list': function(){
       new p5(Attract);
-      console.log('he');
     },
   '#/show': function(){
       new p5(Gravitation);

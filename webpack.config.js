@@ -7,33 +7,37 @@ const pkg = require('./package.json');
 
 const PATHS = {
 	app: path.join(__dirname,'app/index.js'),
-	build: path.join(__dirname,'build')
+	build: path.join(__dirname,'build'),
+	// style: path.join(__dirname,'app/style/base.scss')
 	// vendor: Object.keys(pkg.dependencies)
 }
 
 const common = {
 	entry: {
-		app: PATHS.app	
+		app: PATHS.app,
+
 	},
 	output: {
 		path: PATHS.build
 	},
-	// module:{
-	// 	loaders:[
-	// 		{
-	// 			test: /\.js$/,
-	// 			loader:'babel',
-	// 			exclude: /node_modules/,
-	// 			query: {
-	// 				presets: ['es2015']
-	// 			}
-	// 		}
-	// 	]
-	// },
+	module:{
+		loaders:[
+			{ test: /\.css$/, loader: "style!css" },
+			{
+				test: /\.scss$/,
+				loaders: ['style','css','sass']
+			},
+			{
+				test: /\.sass$/,
+				loaders: ['style','css','sass']
+			}
+		]
+	},
 	plugins: [
 		new HtmlWebpackPlugin({
-		title:'p5 animation'
-	})]	
+		title:'p5 animation',
+		template: path.join(__dirname,'app/index.html')
+	})]
 }
 
 var config;
@@ -53,10 +57,11 @@ switch(process.env.npm_lifecycle_event) {
 						parts.setFreeVariable('process.env.NODE_ENV','production'),
 						parts.minify()
 					)
-		
+
 		break;
 	case 'start':
 		config = merge(common,
+
 						{
 						    devtool: 'eval-source-map'
 						},
