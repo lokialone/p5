@@ -6,30 +6,67 @@
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Document</title>
   <style>
-  .container{
-    display: flex;
-    width: 100%;
-    flex-direction: row;
-    height: 100%;
-  }
-  .left-bar{
-    width: 200px;
-    height: 100%;
-  }
-  .content{
-    flex: 1;
-    height: 100%;
-  }
+      html{
+        height: 100%;
+      }
+      ul {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        height: 100%;
+      }
+      a{
+        text-decoration: none;
+        color: #333;
+      }
+      .nav{
+        padding-left: 10px
+      }
+      .nav-item{
+        padding-left: 10px;
+      }
+      .nav-item a{
+        height: 30px;
+        line-height: 30px;
+      }
+      .sub-nav{
+        padding-left: 20px;
+      }
+      .container{
+        display: flex;
+        width: 100%;
+        flex-direction: row;
+        height: 100%;
+      }
+      .left-bar{
+        width: 200px;
+        height: 500px;
+        font-size: 16px;
+        color:white;
+      }
+      .content{
+        flex: 1;
+        height: 100%;
+      }
   </style>
 </head>
 <body class="container">
 <aside class="left-bar">
-<ul>
-  <li>hello</li>
-  <li>ennn</li>
-  <li>dfdf</li>
-  <li>fdfd</li>
-  <li>fdfdfd</li>
+<ul class="nav">
+  <li class="nav-item">
+    <a href="#">基本运动</a>
+    <ul class="sub-nav">
+        <li><a href="#/freeFall">freeFall</a></li>
+        <li><a href="#/Bouncing">Bouncing</a></li>
+        <li><a href="#/Friction">Friction</a></li>
+        <li><a href="#/Gravitation">Gravitation</a></li>
+        <li><a href="#/Attract">Attract</a></li>
+    </ul>
+  </li>
+  <li class="nav-item"><a href="">震荡</a></li>
+  <li class="nav-item"><a href="">粒子</a></li>
+  <li class="nav-item"><a href=""></a></li>
+  <li class="nav-item"><a href=""></a></li>
 </ul>
 </aside>
 <content class="content">

@@ -4,9 +4,11 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "webpack-dev-server",
-    "build": "webpack"
-  },
+  "build": "webpack",
+  "start": "webpack-dev-server",
+  "stats": "webpack --profile --json > stats.json",
+  "deploy": "gh-pages -d build"
+},
   "author": "lokialone",
   "license": "ISC",
   "devDependencies": {
