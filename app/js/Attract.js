@@ -4,6 +4,7 @@ var Ball =  require('./Ball');
 var Attract =  function() {
 
       var balls = [];
+      console.log(this);
       setup = function() {
         createCanvas(800,640);
         background(224);

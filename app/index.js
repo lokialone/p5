@@ -8,78 +8,55 @@ var freeFall = require('./js/freeFall');
 var friction = require('./js/Friction');
 var Gravitation = require('./js/Gravitation');
 var Attract = require('./js/Attract');
-// new p5(ball.bouncing);
-// new p5(ball.vector_bouncing);
-// new p5(acceleration.acceleration);
-// new p5(freeFall);
-// new p5(friction);
-// new p5(Gravitation);
-// new p5(Attract);
 
-var wawa = {};
-wawa.Router = function(){
-  function Router(){
-  }
-  Router.prototype.setup = function(routemap, defaultFunc){
-    var that = this, rule, func;
+var Router = function(){
+    this.defaultFunc= {};
     this.routemap = [];
-    this.defaultFunc = defaultFunc;
-    for (var rule in routemap) {
-      if (!routemap.hasOwnProperty(rule)) continue;
-      that.routemap.push({
-        rule: new RegExp(rule, 'i'),
-        func: routemap[rule]
-      });
+};
+
+Function.prototype.bind= function(context){
+  var self = this;
+  return function(){
+    return self.apply(context,arguments)
+  }
+}
+Router.prototype.setup = function(routemap, defaultFunc){
+  var rule, func;
+  this.defaultFunc = defaultFunc;
+  for (var rule in routemap) {
+    if (!routemap.hasOwnProperty(rule)) continue;
+    this.routemap.push({
+      rule: new RegExp(rule, 'i'),
+      func: routemap[rule]
+    });
+  }
+  window.addEventListener('hashchange', this.start.bind(this));
+  window.addEventListener('load', this.start.bind(this));
+};
+Router.prototype.start = function(){
+  var hash = location.hash, route, matchResult;
+  for (var routeIndex in this.routemap){
+    route = this.routemap[routeIndex];
+    matchResult = hash.match(route.rule);
+    if (matchResult){
+      route.func.apply(window, matchResult.slice(1));
+      return;
     }
-  };
-  Router.prototype.start = function(){
-    console.log(window.location.hash);
-    var hash = location.hash, route, matchResult;
-    for (var routeIndex in this.routemap){
-      route = this.routemap[routeIndex];
-      matchResult = hash.match(route.rule);
-      if (matchResult){
-        route.func.apply(window, matchResult.slice(1));
-        return;
-      }
-    }
-    this.defaultFunc();
-  };
-  return Router;
-}();
-// window.addEventListener('hashchange', router);
-// window.addEventListener('load', router);
-var router = new wawa.Router();
+  }
+  this.defaultFunc;
+};
+
+var router = new Router();
 router.setup({
   '#/Attract': function(){
-      new p5(Attract);
-      console.log('he');
+      console.log('attract');
+      // new p5(Attract);
     },
   '#/Gravitation': function(){
-      new p5(Gravitation);
+    console.log('Gravitation');
+      // new p5(Gravitation);
     }
 }, function(){
   console.log('default router');
-  new p5(Attract);
+  // new p5(Attract);
 });
-router.start();
-
-// .add('/freeFall', function() {
-//   new p5(freeFall);
-//   console.log('sss');
-// })
-// .add('/Bouncing', function() {
-//   new p5(ball.vector_bouncing);
-// })
-// .add('/Gravitation',function() {
-//   new p5(Gravitation);
-// })
-// .add('/Attract',function(){
-//   new p5(Attract);
-// })
-// .add('/Friction',function(){
-//   new p5(friction);
-// })
-// .add(function(){
-//   new p5(Attract);
-// })
