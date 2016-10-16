@@ -1,26 +1,25 @@
 var Vector =  require('./Vector');
 var Ball =  require('./Ball');
+var p5 = require('p5')
 
-var Attract =  function() {
-
+var Attract =  function(p) {
       var balls = [];
-      console.log(this);
-      setup = function() {
-        createCanvas(800,640);
-        background(224);
+      p.setup = function() {
+        p.createCanvas(800,640);
+        p.background(224);
         for(var i = 0;i < 20; i++){
-          balls[i] = new Ball(random(10,40),random(0,width),random(0,height));
+          balls[i] = new Ball(p.random(10,40),p.random(0,p.width),p.random(0,p.height));
         }
       }
 
-      draw = function() {
-        background(224);
+      p.draw = function() {
+        p.background(224);
         for(var i = 0;i < 20;i++){
-          balls[i].render();
+          balls[i].render(p);
           for(var j = 0;j < 20;j++){
             if(i !== j){
               balls[j].acceleration = new Vector(0,0);
-              var force  = balls[i].attract(balls[j]);
+              var force  = balls[i].attract(balls[j],p);
               balls[j].applyForce(force);
               balls[j].update();
             }

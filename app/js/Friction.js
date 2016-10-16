@@ -2,25 +2,25 @@ var Vector = require('./Vector');
 var Ball = require('./Ball');
 var Liquid = require('./Liquid');
 
-var friction = function() {
+var friction = function(p) {
 
 	var liquid;
 	var cycles = [];
-	setup = function() {
-		createCanvas(800,480);
-	 	background(224);
-		liquid = new Liquid(0, height/2, width, height/2, 1);
+	p.setup = function() {
+		p.createCanvas(800,480);
+	 	p.background(224);
+		liquid = new Liquid(0, p.height/2, p.width, p.height/2, 1);
 		for(var i = 0; i < 6; i++){
-			cycles[i] = new Cycle(random(5,50),60 + i * 120,60);
+			cycles[i] = new Cycle(p.random(5,50),60 + i * 120,60);
 		}
 	}
 
-	draw =  function() {
-		background(224);
-		liquid.display();
+	p.draw =  function() {
+		p.background(224);
+		liquid.display(p);
 		for(var i = 0; i < 5; i++){
 			cycles[i].update(liquid);
-			cycles[i].render();
+			cycles[i].render(p);
 		}
 	}
 
@@ -58,8 +58,8 @@ var friction = function() {
 
 	}
 	Cycle.prototype.checkEage = function(){
-		if(this.location.y >= height-this.mass/2){
-			this.location.y = height - this.mass/2;
+		if(this.location.y >= p.height-this.mass/2){
+			this.location.y = p.height - this.mass/2;
 			this.velocity.mult(-1);
 		}
 	}

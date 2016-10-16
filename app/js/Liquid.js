@@ -4,12 +4,12 @@ var Liquid = function(x,y,w,h,c){
 	this.y = y ;
 	this.w = w ;
 	this.h = h ;
-	this.c = c ;	
+	this.c = c ;
 
-	this.display = function(){
-		noStroke();
-    	fill(133);
-    	rect(this.x,this.y,this.w,this.h);
+	this.display = function(p){
+			p.noStroke();
+    	p.fill(133);
+    	p.rect(this.x,this.y,this.w,this.h);
 	}
 
 

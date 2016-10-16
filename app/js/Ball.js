@@ -8,6 +8,9 @@ var Ball = function(m,x,y){
 		this.acceleration  = new Vector(0,0);
 		this.G = 0.0009;
  	}
+	Ball.prototype.setG = function(g){
+		this.G = g
+	}
 
  	Ball.prototype.update = function() {
 	 	this.velocity.add(this.acceleration);
@@ -20,10 +23,10 @@ var Ball = function(m,x,y){
 		this.acceleration.add(force);
 	}
 
-	Ball.prototype.attract = function(m) {
+	Ball.prototype.attract = function(m,p) {
 		var dir = Vector.dir(this.location,m.location);
 		var distance = dir.mag();
-		distance = constrain(distance,5,25);
+		distance = p.constrain(distance,5,25);
 		var forceSize = this.mass * m.mass * this.G / (distance * distance);
 		dir.normalize();
 		dir.mult(forceSize);
@@ -45,10 +48,10 @@ var Ball = function(m,x,y){
  		}
  	}
 
- 	Ball.prototype.render = function() {
-	 	noStroke();
-	 	fill(color(255, 122, 144, 0.8 * 255));
-	 	ellipse(this.location.x,this.location.y,this.mass,this.mass);
+ 	Ball.prototype.render = function(p) {
+	 	p.noStroke();
+	 	p.fill(p.color(255, 122, 144, 0.8 * 255));
+	 	p.ellipse(this.location.x,this.location.y,this.mass,this.mass);
  	}
 
  module.exports = Ball;

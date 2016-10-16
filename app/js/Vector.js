@@ -25,7 +25,7 @@ Vector.prototype.get = function(){
 }
 
 Vector.prototype.mag = function() {
-	return sqrt(this.x * this.x + this.y * this.y);
+	return Math.sqrt(this.x * this.x + this.y * this.y);
 }
 
 Vector.prototype.normalize = function() {

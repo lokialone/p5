@@ -39,7 +39,7 @@ Router.prototype.start = function(){
     route = this.routemap[routeIndex];
     matchResult = hash.match(route.rule);
     if (matchResult){
-      route.func.apply(window, matchResult.slice(1));
+      route.func.apply(p5, matchResult.slice(1));
       return;
     }
   }
@@ -49,14 +49,17 @@ Router.prototype.start = function(){
 var router = new Router();
 router.setup({
   '#/Attract': function(){
-      console.log('attract');
-      // new p5(Attract);
+
+      new p5(Attract);
     },
   '#/Gravitation': function(){
-    console.log('Gravitation');
-      // new p5(Gravitation);
-    }
+
+      new p5(Gravitation);
+    },
+  '#/Friction': function(){
+      
+      new p5(friction);
+  }
 }, function(){
-  console.log('default router');
-  // new p5(Attract);
+  new p5(Attract);
 });
