@@ -49,17 +49,22 @@ Router.prototype.start = function(){
 var router = new Router();
 router.setup({
   '#/Attract': function(){
-
-      new p5(Attract);
+    new p5(Attract);
     },
   '#/Gravitation': function(){
-
-      new p5(Gravitation);
+     new p5(Gravitation);
     },
   '#/Friction': function(){
-      
       new p5(friction);
   }
 }, function(){
   new p5(Attract);
 });
+
+var p5Instance = function() {
+  this.instance = null;
+}
+
+p5Instance.init = function(sketch) {
+    
+}
