@@ -61,10 +61,12 @@ router.setup({
   new p5(Attract);
 });
 
+// todo
+// 使用单例模式生成函数
 var p5Instance = function() {
   this.instance = null;
 }
 
 p5Instance.init = function(sketch) {
-    
+
 }
