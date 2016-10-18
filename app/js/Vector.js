@@ -52,6 +52,4 @@ Vector.prototype.getSubObject = function(vector){
 	return new Vector(this.x - vector.x,this.y - vector.y);
 }
 
-
-
 module.exports = Vector;
