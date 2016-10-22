@@ -1,6 +1,5 @@
 var Vector = require('./Vector');
 var Ball = require('./Ball');
-var p5 = require('p5');
 var Gravitation = function(p) {
     var balls=[];
     var attractor = '';
