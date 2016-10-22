@@ -10,6 +10,8 @@ var Gravitation = require('./js/Gravitation');
 var Attract = require('./js/Attract');
 var Router = require('./route');
 var Rotate = require('./js/Rotate');
+var TankGame =  require('./js/TankGame');
+
 var router = new Router();
 router.setup({
   '#/Attract': function(){
@@ -23,6 +25,9 @@ router.setup({
   },
   '#/Rotate': function() {
     p5Instance.init(Rotate);
+  },
+  '#/TankGame': function() {
+    p5Instance.init(TankGame);
   }
 }, function(){
     p5Instance.init(Attract);
