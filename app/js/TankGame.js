@@ -32,11 +32,19 @@ var Tank = function(){
   // tank的圆角
   this.borderRadius = 5;
   this.slotBulletFlag = true;
+  this.margin = 30;
   // tank的重心坐标
   this.center_x = 0;
   this.center_y = 0;
-
+  this.rotation = 0;
   this.step = 10;
+
+  this.Direction = {
+    UP : 0,
+    RIGHT: Math.PI / 2,
+    DOWN: Math.PI ,
+    LEFT: Math.PI * 3 / 2
+  }
 }
 
 Tank.prototype.switchSlotBulletFlag = function(status) {
@@ -45,7 +53,7 @@ Tank.prototype.switchSlotBulletFlag = function(status) {
 
 Tank.prototype.setCenter =  function(p){
   this.center_x = p.width / 2;
-  this.center_y = p.height - this.tankHeight / 2;
+  this.center_y = p.height - this.tankHeight / 2 - this.margin;
 }
 
 Tank.prototype.updateCenter = function(x,y){
@@ -54,8 +62,6 @@ Tank.prototype.updateCenter = function(x,y){
 }
 
 Tank.prototype.turnLeft = function(p){
-  console.log('lefe');
-  // p.translate(this.center_x, this.center_y);
   p.rotate(p.PI/2);
 }
 
@@ -63,21 +69,54 @@ Tank.prototype.goForward = function(){
   this.center_y -= this.step;
 }
 
+Tank.prototype.rotate = function(deg){
+  this.rotation = deg;
+}
+
+Tank.prototype.setDirection = function(direction){
+  if(this.rotation !== direction){
+    this.rotate(direction);
+  }
+}
+
+Tank.prototype.goLeft = function(){
+  this.setDirection(this.Direction.LEFT);
+  this.center_x--;
+}
+Tank.prototype.goRight = function() {
+  this.setDirection(this.Direction.RIGHT);
+  this.center_x++;
+}
+
+Tank.prototype.goUp = function() {
+  this.setDirection(this.Direction.UP);
+  this.center_y--;
+}
+
+Tank.prototype.goDown = function() {
+  this.setDirection(this.Direction.DOWN);
+  this.center_y++;
+}
+
 Tank.prototype.goBack = function() {
   this.center_y += this.step;
 }
 Tank.prototype.render = function(p) {
 
+  p.push();
   // 坦克的body
+  p.translate(this.center_x, this.center_y);
+  p.rotate(this.rotation);
   p.fill(255, 204, 0);
-  p.rect(this.center_x - this.tankWidth / 2, this.center_y - this.tankHeight / 2, this.tankWidth, this.tankHeight,this.borderRadius);
+  p.rect(-this.tankWidth / 2, -this.tankHeight / 2, this.tankWidth, this.tankHeight,this.borderRadius);
   //坦克的炮台
   p.fill(153, 204, 0);
-  p.rect(this.center_x - this.gunturretWidth / 2 , this.center_y - this.gunturretHeight / 2, this.gunturretWidth, this.gunturretHeight,this.borderRadius);
+  p.rect(- this.gunturretWidth / 2 , - this.gunturretHeight / 2, this.gunturretWidth, this.gunturretHeight,this.borderRadius);
   // 坦克的大炮
   p.fill(255,255,255);
-  p.rect(this.center_x - this.cannonDiameter / 2, this.center_y - this.gunturretHeight / 2 - this.cannonHeight,this.cannonDiameter,this.cannonHeight);
+  p.rect( - this.cannonDiameter / 2,  - this.gunturretHeight / 2 - this.cannonHeight,this.cannonDiameter,this.cannonHeight);
 
+  p.pop();
 }
 
 Tank.prototype.slotBullet = function(p) {
@@ -101,14 +140,17 @@ var TankGame = function(p){
   }
   p.draw = function() {
     p.background(224);
-    if (p.keyIsDown(p.LEFT_ARROW)) {
-
+    if(p.keyIsDown(p.LEFT_ARROW)) {
+      tank.goLeft();
     }
-    if (p.keyIsDown(p.UP_ARROW)) {
-      tank.goForward();
+    if(p.keyIsDown(p.UP_ARROW)) {
+      tank.goUp();
     }
-    if (p.keyIsDown(p.DOWN_ARROW)) {
-        tank.goBack();
+    if(p.keyIsDown(p.DOWN_ARROW)) {
+      tank.goDown();
+    }
+    if(p.keyIsDown(p.RIGHT_ARROW)) {
+      tank.goRight();
     }
     tank.render(p);
     bullet.render(p);
