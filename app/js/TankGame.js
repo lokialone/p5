@@ -1,8 +1,17 @@
-var Bullet = function() {
+
+var Direction = {
+  UP : 0,
+  RIGHT: Math.PI / 2,
+  DOWN: Math.PI ,
+  LEFT: Math.PI * 3 / 2
+}
+
+var Bullet = function(x,y,direction) {
   this.bulletSize = 4;
-  this.x = 0;
-  this.y = 0;
+  this.x = x;
+  this.y = y;
   this.grap = 4;
+  this.direction = direction;
 }
 
 Bullet.prototype.render = function(p) {
@@ -14,11 +23,36 @@ Bullet.prototype.setLocation = function(x,y) {
   this.y = y;
 }
 
-Bullet.prototype.update = function(){
-     this.y-= this.grap ;
-     if(this.y <= 0){
-       this.y = -bulletSize;
-     }
+Bullet.prototype.setDirection = function(direction) {
+  this.direction = direction
+}
+
+Bullet.prototype.update = function(p){
+    switch (this.direction) {
+      case Direction.UP:
+          this.y-=this.grap;
+          break;
+      case Direction.DOWN:
+          this.y+=this.grap;
+          break;
+      case Direction.RIGHT:
+          this.x+=this.grap;
+          break;
+      case Direction.LEFT:
+          this.x-=this.grap;
+          break;
+      default:
+          this.x+=this.grap;
+
+    }
+    this.checkEdges(p.width,p.height);
+
+}
+
+Bullet.prototype.checkEdges = function(width,height){
+  if(this.x > width || this.x < 0 || this.y > height || this.y < 0){
+    this.y = -this.bulletSize;
+  }
 }
 
 var Tank = function(){
@@ -43,15 +77,15 @@ var Tank = function(){
   this.rotation = 0;
   this.step = 2;
 
-  this.bullet = new Bullet();
+  this.bullet = '';
   this.slotFlag = false;
 
-  this.Direction = {
-    UP : 0,
-    RIGHT: Math.PI / 2,
-    DOWN: Math.PI ,
-    LEFT: Math.PI * 3 / 2
-  }
+  // Direction = {
+  //   UP : 0,
+  //   RIGHT: Math.PI / 2,
+  //   DOWN: Math.PI ,
+  //   LEFT: Math.PI * 3 / 2
+  // }
 }
 
 Tank.prototype.setCenter =  function(p){
@@ -75,30 +109,27 @@ Tank.prototype.setDirection = function(direction){
 }
 
 Tank.prototype.goLeft = function(){
-  this.setDirection(this.Direction.LEFT);
+  this.setDirection(Direction.LEFT);
   this.center_x-=this.step;
 }
 Tank.prototype.goRight = function() {
-  this.setDirection(this.Direction.RIGHT);
+  this.setDirection(Direction.RIGHT);
   this.center_x+=this.step;
 }
 
 Tank.prototype.goUp = function() {
-  this.setDirection(this.Direction.UP);
+  this.setDirection(Direction.UP);
   this.center_y-=this.step;
 }
 
 Tank.prototype.goDown = function() {
-  this.setDirection(this.Direction.DOWN);
+  this.setDirection(Direction.DOWN);
   this.center_y+=this.step;
 }
 
 Tank.prototype.slotBullet = function() {
   this.slotFlag = true;
-  console.log(this.bullet);
-  this.bullet.setLocation(this.center_x.center_y);
-
-
+  this.bullet = new Bullet(this.center_x,this.center_y,this.rotation);
 }
 
 Tank.prototype.render = function(p) {
@@ -148,15 +179,13 @@ var TankGame = function(p){
 
     if(p.keyIsDown(p.CONTROL)){
       tank.slotBullet();
-      console.log(tank.slotFlag);
     }
 
     if(tank.slotFlag){
-      tank.bullet.update();
+      tank.bullet.render(p);
+      tank.bullet.update(p);
     }
     tank.render(p);
-    tank.bullet.render(p);
-
 
   }
 
