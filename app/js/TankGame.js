@@ -1,4 +1,3 @@
-
 var Direction = {
   UP : 0,
   RIGHT: Math.PI / 2,
@@ -43,14 +42,13 @@ Bullet.prototype.update = function(p){
           break;
       default:
           this.x+=this.grap;
-
     }
     this.checkEdges(p.width,p.height);
 
 }
 
 Bullet.prototype.checkEdges = function(width,height){
-  if(this.x > width || this.x < 0 || this.y > height || this.y < 0){
+  if(this.x >= width || this.x <= 0 || this.y >= height || this.y <= 0){
     this.y = -this.bulletSize;
   }
 }
@@ -77,15 +75,8 @@ var Tank = function(){
   this.rotation = 0;
   this.step = 2;
 
-  this.bullet = '';
-  this.slotFlag = false;
-
-  // Direction = {
-  //   UP : 0,
-  //   RIGHT: Math.PI / 2,
-  //   DOWN: Math.PI ,
-  //   LEFT: Math.PI * 3 / 2
-  // }
+  this.bullets = [];
+  this.bulletsCounts = 0;
 }
 
 Tank.prototype.setCenter =  function(p){
@@ -128,11 +119,18 @@ Tank.prototype.goDown = function() {
 }
 
 Tank.prototype.slotBullet = function() {
-  this.slotFlag = true;
-  this.bullet = new Bullet(this.center_x,this.center_y,this.rotation);
+  this.bullets[this.bulletsCounts] = new Bullet(this.center_x,this.center_y,this.rotation);
+  this.bulletsCounts++;
+
 }
 
 Tank.prototype.render = function(p) {
+
+  // render bullets
+  for(var i = 0; i < this.bulletsCounts; i++){
+    this.bullets[i].render(p);
+    this.bullets[i].update(p);
+  }
 
   p.push();
   // 坦克的body
@@ -148,6 +146,8 @@ Tank.prototype.render = function(p) {
   p.rect( - this.cannonDiameter / 2,  - this.gunturretHeight / 2 - this.cannonHeight,this.cannonDiameter,this.cannonHeight);
 
   p.pop();
+
+
 }
 
 var TankGame = function(p){
@@ -177,18 +177,14 @@ var TankGame = function(p){
       tank.goRight();
     }
 
-    if(p.keyIsDown(p.CONTROL)){
-      tank.slotBullet();
-    }
-
-    if(tank.slotFlag){
-      tank.bullet.render(p);
-      tank.bullet.update(p);
-    }
     tank.render(p);
-
   }
 
+  p.keyPressed = function() {
+    if(p.keyCode === p.CONTROL){
+      tank.slotBullet();
+    }
+  }
 }
 
 module.exports = TankGame;
