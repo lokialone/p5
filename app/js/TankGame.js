@@ -11,6 +11,7 @@ var Bullet = function(x,y,direction) {
   this.y = y;
   this.grap = 4;
   this.direction = direction;
+  this.power = 1;
 }
 
 Bullet.prototype.render = function(p) {
@@ -56,7 +57,7 @@ Bullet.prototype.checkEdges = function(width,height){
 var Tank = function(){
 
   this.tankWidth = 50;
-  this.tankHeight = 40;
+  this.tankHeight = 50;
 
   this.gunturretWidth = 30;
   this.gunturretHeight = 20;
@@ -72,16 +73,16 @@ var Tank = function(){
   this.center_x = 0;
   this.center_y = 0;
 
-  this.rotation = 0;
+  this.direction = 0;
   this.step = 2;
 
   this.bullets = [];
   this.bulletsCounts = 0;
 }
 
-Tank.prototype.setCenter =  function(p){
-  this.center_x = p.width / 2;
-  this.center_y = p.height - this.tankHeight / 2 - this.margin;
+Tank.prototype.setCenter =  function(x,y){
+  this.center_x = x;
+  this.center_y = y;
 }
 
 Tank.prototype.updateCenter = function(x,y){
@@ -90,11 +91,11 @@ Tank.prototype.updateCenter = function(x,y){
 }
 
 Tank.prototype.rotate = function(deg){
-  this.rotation = deg;
+  this.direction = deg;
 }
 
 Tank.prototype.setDirection = function(direction){
-  if(this.rotation !== direction){
+  if(this.direction !== direction){
     this.rotate(direction);
   }
 }
@@ -103,6 +104,7 @@ Tank.prototype.goLeft = function(){
   this.setDirection(Direction.LEFT);
   this.center_x-=this.step;
 }
+
 Tank.prototype.goRight = function() {
   this.setDirection(Direction.RIGHT);
   this.center_x+=this.step;
@@ -119,7 +121,7 @@ Tank.prototype.goDown = function() {
 }
 
 Tank.prototype.slotBullet = function() {
-  this.bullets[this.bulletsCounts] = new Bullet(this.center_x,this.center_y,this.rotation);
+  this.bullets[this.bulletsCounts] = new Bullet(this.center_x,this.center_y,this.direction);
   this.bulletsCounts++;
 
 }
@@ -135,7 +137,7 @@ Tank.prototype.render = function(p) {
   p.push();
   // 坦克的body
   p.translate(this.center_x, this.center_y);
-  p.rotate(this.rotation);
+  p.rotate(this.direction);
   p.fill(255, 204, 0);
   p.rect(-this.tankWidth / 2, -this.tankHeight / 2, this.tankWidth, this.tankHeight,this.borderRadius);
   //坦克的炮台
@@ -150,17 +152,78 @@ Tank.prototype.render = function(p) {
 
 }
 
+var EnemyTank = function(x,y) {
+  Tank.call(this.x,y);
+  this.step = 1;
+}
+
+EnemyTank.prototype = new Tank();
+
+EnemyTank.prototype.autoMove = function(p) {
+  this.render(p);
+  this.autoUpdate(p);
+}
+EnemyTank.prototype.autoUpdate = function(p){
+
+    switch (this.direction) {
+      case Direction.UP:
+        this.center_y-=this.step;
+        break;
+      case Direction.DOWN:
+        this.center_y+=this.step;
+        break;
+      case Direction.LEFT:
+        this.center_x-=this.step;
+        break;
+      case Direction.RIGHT:
+        this.center_x+=this.step;
+        break;
+      default:
+        this.center_y+=this.step;
+    }
+
+    this.autoChangeDirection(p.width,p.height);
+
+}
+
+EnemyTank.prototype.autoChangeDirection = function(width,height) {
+
+  if(this.center_y >= height - this.tankHeight || this.center_y <= this.tankWidth){
+    if(this.center_x < this.tankWidth + 30){
+      this.setDirection(Direction.RIGHT);
+    }else{
+      this.setDirection(Direction.LEFT);
+    }
+  }else if(this.center_x >=width - this.tankWidth || this.center_x <= this,tankWidth){
+
+  }
+
+
+
+
+}
+
+EnemyTank.prototype.autoSlot = function() {
+
+}
+
 var TankGame = function(p){
 
   var tank = new Tank();
-  var bulletsCounts = 100;
+  var enemyTank = [];
+  var enemyTankCounts = 3;
 
   p.setup = function() {
     p.createCanvas(800,640);
     p.background(224);
     p.fill(255,204,0);
-    tank.setCenter(p);
-
+    tank.setCenter(p.width / 2, p.height - 60);
+    var enemyTankLocation = [ {x:30,y:60},{x:p.width/2-25,y:60},{x:p.width-30,y:60} ];
+    for(var i = 0; i < enemyTankCounts;i++){
+      enemyTank[i] = new EnemyTank();
+      enemyTank[i].setCenter(enemyTankLocation[i].x,enemyTankLocation[i].y);
+      enemyTank[i].setDirection(Direction.DOWN);
+    }
   }
   p.draw = function() {
     p.background(224);
@@ -178,6 +241,10 @@ var TankGame = function(p){
     }
 
     tank.render(p);
+    for(var i = 0; i < enemyTankCounts;i++){
+      enemyTank[i].autoMove(p);
+    }
+
   }
 
   p.keyPressed = function() {
