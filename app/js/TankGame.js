@@ -1,5 +1,5 @@
 var Direction = {
-  UP : 0,
+  UP: 0,
   RIGHT: Math.PI / 2,
   DOWN: Math.PI ,
   LEFT: Math.PI * 3 / 2
@@ -12,6 +12,7 @@ var Bullet = function(x,y,direction) {
   this.grap = 4;
   this.direction = direction;
   this.power = 1;
+  this.isLive = true;
 }
 
 Bullet.prototype.render = function(p) {
@@ -68,7 +69,7 @@ var Tank = function(){
   // tank的圆角
   this.borderRadius = 5;
   this.slotBulletFlag = true;
-  this.margin = 30;
+  this.margin = 5;
   // tank的重心坐标
   this.center_x = 0;
   this.center_y = 0;
@@ -152,9 +153,13 @@ Tank.prototype.render = function(p) {
 
 }
 
-var EnemyTank = function(x,y) {
-  Tank.call(this.x,y);
+var EnemyTank = function(min,x_max,y_max) {
+  Tank.call(this);
+  this.edge_min = min;
+  this.edge_x_max = x_max;
+  this.edge_y_max = y_max;
   this.step = 1;
+  this.dirs=['UP','DOWN','LEFT','RIGHT'];
 }
 
 EnemyTank.prototype = new Tank();
@@ -163,42 +168,58 @@ EnemyTank.prototype.autoMove = function(p) {
   this.render(p);
   this.autoUpdate(p);
 }
+
 EnemyTank.prototype.autoUpdate = function(p){
+
+    this.goForward();
+    if(this.isEdges()){
+      this.findDirection();
+    }
+}
+
+EnemyTank.prototype.isEdges =  function() {
+  if(this.center_x <= this.edge_min || this.center_x >= this.edge_x_max || this.center_y <=this.edge_min || this.center_y >=this.edge_y_max ){
+    return true;
+  }
+  return false;
+}
+
+EnemyTank.prototype.goForward = function(rate) {
+    if(arguments.length === 0){
+      var rate = 1;
+    }
 
     switch (this.direction) {
       case Direction.UP:
-        this.center_y-=this.step;
+        this.center_y-=this.step*rate;
         break;
       case Direction.DOWN:
-        this.center_y+=this.step;
+        this.center_y+=this.step*rate;
         break;
       case Direction.LEFT:
-        this.center_x-=this.step;
+        this.center_x-=this.step*rate;
         break;
       case Direction.RIGHT:
-        this.center_x+=this.step;
+        this.center_x+=this.step*rate;
         break;
       default:
-        this.center_y+=this.step;
+        this.center_y+=this.step*rate;
     }
-
-    this.autoChangeDirection(p.width,p.height);
-
 }
 
-EnemyTank.prototype.autoChangeDirection = function(width,height) {
-
-  if(this.center_y >= height - this.tankHeight || this.center_y <= this.tankWidth){
-    if(this.center_x < this.tankWidth + 30){
-      this.setDirection(Direction.RIGHT);
-    }else{
-      this.setDirection(Direction.LEFT);
-    }
-  }else if(this.center_x >=width - this.tankWidth || this.center_x <= this,tankWidth){
-
-  }
-
-
+EnemyTank.prototype.findDirection = function() {
+      
+      for(var dir in Direction){
+        if(this.direction === Direction[dir])
+          continue;
+        this.setDirection(Direction[dir]);
+        this.goForward();
+        if(!this.isEdges()){
+          this.goForward(-1);
+          break;
+        }
+        this.goForward(-1);
+      }
 
 
 }
@@ -209,6 +230,7 @@ EnemyTank.prototype.autoSlot = function() {
 
 var TankGame = function(p){
 
+  const EDGE_MIN = 40;
   var tank = new Tank();
   var enemyTank = [];
   var enemyTankCounts = 3;
@@ -218,9 +240,9 @@ var TankGame = function(p){
     p.background(224);
     p.fill(255,204,0);
     tank.setCenter(p.width / 2, p.height - 60);
-    var enemyTankLocation = [ {x:30,y:60},{x:p.width/2-25,y:60},{x:p.width-30,y:60} ];
+    var enemyTankLocation = [ {x:EDGE_MIN,y:60},{x:p.width/2-25,y:60},{x:p.width-EDGE_MIN,y:60} ];
     for(var i = 0; i < enemyTankCounts;i++){
-      enemyTank[i] = new EnemyTank();
+      enemyTank[i] = new EnemyTank(EDGE_MIN,p.width-EDGE_MIN,p.height-EDGE_MIN);
       enemyTank[i].setCenter(enemyTankLocation[i].x,enemyTankLocation[i].y);
       enemyTank[i].setDirection(Direction.DOWN);
     }
