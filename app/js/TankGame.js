@@ -25,7 +25,7 @@ Bullet.prototype.setLocation = function(x,y) {
 }
 
 Bullet.prototype.setDirection = function(direction) {
-  this.direction = direction
+  this.direction = direction;
 }
 
 Bullet.prototype.update = function(p){
@@ -45,13 +45,14 @@ Bullet.prototype.update = function(p){
       default:
           this.x+=this.grap;
     }
-    this.checkEdges(p.width,p.height);
+    // this.checkEdges(p.width,p.height);
 
 }
 
 Bullet.prototype.checkEdges = function(width,height){
   if(this.x >= width || this.x <= 0 || this.y >= height || this.y <= 0){
-    this.y = -this.bulletSize;
+    // this.y = -this.bulletSize;
+
   }
 }
 
@@ -78,12 +79,18 @@ var Tank = function(){
   this.step = 2;
 
   this.bullets = [];
-  this.bulletsCounts = 0;
+
+
+  this.blood = 3;
 }
 
 Tank.prototype.setCenter =  function(x,y){
   this.center_x = x;
   this.center_y = y;
+}
+
+Tank.prototype.getShot =  function(){
+
 }
 
 Tank.prototype.updateCenter = function(x,y){
@@ -122,15 +129,14 @@ Tank.prototype.goDown = function() {
 }
 
 Tank.prototype.slotBullet = function() {
-  this.bullets[this.bulletsCounts] = new Bullet(this.center_x,this.center_y,this.direction);
-  this.bulletsCounts++;
+  this.bullets.push(new Bullet(this.center_x,this.center_y,this.direction));
 
 }
 
 Tank.prototype.render = function(p) {
 
   // render bullets
-  for(var i = 0; i < this.bulletsCounts; i++){
+  for(var i = 0; i < this.bullets.length; i++){
     this.bullets[i].render(p);
     this.bullets[i].update(p);
   }
@@ -208,7 +214,7 @@ EnemyTank.prototype.goForward = function(rate) {
 }
 
 EnemyTank.prototype.findDirection = function() {
-      
+
       for(var dir in Direction){
         if(this.direction === Direction[dir])
           continue;
@@ -231,14 +237,22 @@ EnemyTank.prototype.autoSlot = function() {
 var TankGame = function(p){
 
   const EDGE_MIN = 40;
-  var tank = new Tank();
+  var tank ='';
   var enemyTank = [];
   var enemyTankCounts = 3;
-
+  var score = 0;
+  var heart;
+  var heart_img = require('../img/heart.png');
+  var lives;
+  p.preload = function(){
+    heart = p.loadImage(heart_img);
+  }
   p.setup = function() {
+    lives = 3;
     p.createCanvas(800,640);
     p.background(224);
     p.fill(255,204,0);
+    tank = new Tank();
     tank.setCenter(p.width / 2, p.height - 60);
     var enemyTankLocation = [ {x:EDGE_MIN,y:60},{x:p.width/2-25,y:60},{x:p.width-EDGE_MIN,y:60} ];
     for(var i = 0; i < enemyTankCounts;i++){
@@ -249,6 +263,12 @@ var TankGame = function(p){
   }
   p.draw = function() {
     p.background(224);
+    p.textSize(24);
+
+
+
+
+    // 控制tank的方向
     if(p.keyIsDown(p.LEFT_ARROW)) {
       tank.goLeft();
     }
@@ -263,8 +283,44 @@ var TankGame = function(p){
     }
 
     tank.render(p);
-    for(var i = 0; i < enemyTankCounts;i++){
+
+    // render enemytank
+    for(var i = 0; i < enemyTank.length;i++){
       enemyTank[i].autoMove(p);
+    }
+
+    p.text("Score: " + score, 30, 50);
+    switch(lives)
+    {
+      case 3:
+        p.image(heart, 650, 30);
+        p.image(heart, 690, 30);
+        p.image(heart, 730, 30);
+      break;
+      case 2:
+        p.image(heart, 690, 30);
+        p.image(heart, 730, 30);
+      break;
+      case 1:
+        p.image(heart, 730, 30);
+      break;
+    }
+
+    // 判断子弹击中enemyTank
+
+    for(var i = 0; i < tank.bullets.length; i++){
+      for(var j= 0; j < enemyTank.length;j++){
+        if(p.dist(tank.bullets[i].x, tank.bullets[i].y, enemyTank[j].center_x, enemyTank[j].center_y) <=tank.tankWidth/2){
+          score++;
+          enemyTank.splice(j,1);
+        }
+      }
+    }
+
+    for(var i = 0; i < tank.bullets.length;i++){
+      if(tank.bullets[i].x <= 0 || tank.bullets[i].y <=0 || tank.bullets[i].x >= p.width || tank.bullets[i] <= p.height ){
+        tank.bullets.splice(i,1);
+      }
     }
 
   }

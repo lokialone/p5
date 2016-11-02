@@ -26,10 +26,6 @@ var Attract =  function(p) {
           }
         }
       }
-      // p.mousePressed = function() {
-      //   p.remove();
-      // }
-
 }
 
 module.exports = Attract;

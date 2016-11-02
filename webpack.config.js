@@ -30,6 +30,10 @@ const common = {
 			{
 				test: /\.sass$/,
 				loaders: ['style','css','sass']
+			},
+			{
+			    test: /.*\.(gif|png|jpe?g|svg)$/i,
+			    loader: 'url-loader?limit=8192&name=img/[name].[ext]'
 			}
 		]
 	},
