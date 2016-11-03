@@ -165,6 +165,10 @@ var EnemyTank = function(min,x_max,y_max) {
   this.edge_x_max = x_max;
   this.edge_y_max = y_max;
   this.step = 1;
+  //this.bullets = [];
+  this.bullet;
+  this.bulletsDistance = 60;
+  this.bulletsCount = 5;
   this.dirs=['UP','DOWN','LEFT','RIGHT'];
 }
 
@@ -176,7 +180,6 @@ EnemyTank.prototype.autoMove = function(p) {
 }
 
 EnemyTank.prototype.autoUpdate = function(p){
-
     this.goForward();
     if(this.isEdges()){
       this.findDirection();
@@ -230,7 +233,34 @@ EnemyTank.prototype.findDirection = function() {
 
 }
 
-EnemyTank.prototype.autoSlot = function() {
+EnemyTank.prototype.initBullets = function() {
+  // this.bullets.push(new Bullet(this.center_x,this.center_y,this.direction));
+  this.bullet = new Bullet(this.center_x,this.center_y,this.direction);
+}
+
+EnemyTank.prototype.bulletsRender = function(p){
+  // bullets not finish
+  // for(var i = 0,len = this.bullets.length;i < len;i++){
+  //     this.bullets[i].render(p);
+  //     if(i !==0 && i !== len-1 && p.dist(this.bullets[i].x,this.bullets[i].y,this.bullets[i+1].x,this.bullets[i+1].y) <= this.bulletsDistance){
+  //       continue;
+  //     }
+  //
+  //     if(this.bullets[i].x <=0 || this.bullets[i].x >= this.edge_x_max || this.bullets[i].y >= this.edge_y_max || this.bullets[i].y <=0){
+  //       // this.bullets.splice(i,1);
+  //       // this.bullets.push(new Bullets(this.center_x,this.center_y,this.direction));
+  //       this.bullets[i].setLocation(this.center_x,this.center_y);
+  //       this.bullets[i].setDirection(this.direction);
+  //     }
+  // }
+
+  // temp
+   this.bullet.render(p);
+   if(this.bullet.x <=0 || this.bullet.x >= this.edge_x_max || this.bullet.y >= this.edge_y_max || this.bullet.y <=0){
+     this.bullet.setLocation(this.center_x,this.center_y);
+     this.bullet.setDirection(this.direction);
+   }
+   this.bullet.update();
 
 }
 
@@ -242,10 +272,12 @@ var TankGame = function(p){
   var enemyTankCounts = 3;
   var score = 0;
   var heart;
-  var heart_img = require('../img/heart.png');
+  var scoreSound;
   var lives;
   p.preload = function(){
-    heart = p.loadImage(heart_img);
+    heart = p.loadImage(require('../img/heart.png'));
+    // scoreSound = p.loadSound('../audio/score.mp3');
+
   }
   p.setup = function() {
     lives = 3;
@@ -259,6 +291,7 @@ var TankGame = function(p){
       enemyTank[i] = new EnemyTank(EDGE_MIN,p.width-EDGE_MIN,p.height-EDGE_MIN);
       enemyTank[i].setCenter(enemyTankLocation[i].x,enemyTankLocation[i].y);
       enemyTank[i].setDirection(Direction.DOWN);
+      enemyTank[i].initBullets();
     }
   }
   p.draw = function() {
@@ -286,6 +319,7 @@ var TankGame = function(p){
 
     // render enemytank
     for(var i = 0; i < enemyTank.length;i++){
+      enemyTank[i].bulletsRender(p);
       enemyTank[i].autoMove(p);
     }
 
@@ -312,8 +346,10 @@ var TankGame = function(p){
       for(var j= 0; j < enemyTank.length;j++){
         if(p.dist(tank.bullets[i].x, tank.bullets[i].y, enemyTank[j].center_x, enemyTank[j].center_y) <=tank.tankWidth/2){
           score++;
+          // scoreSound.play();
           enemyTank.splice(j,1);
         }
+
       }
     }
 
@@ -323,6 +359,14 @@ var TankGame = function(p){
       }
     }
 
+    // 判断tank是否被击中
+    for(var i = enemyTank.length-1; i >=0; i--){
+      if(p.dist(enemyTank[i].bullet.x,enemyTank[i].bullet.y,tank.center_x,tank.center_y) <= tank.tankWidth/2){
+        lives--;
+        enemyTank[i].bullet.setLocation(enemyTank[i].center_x,enemyTank[i].center_y);
+        enemyTank[i].bullet.setDirection(enemyTank[i].direction);
+      }
+    }
   }
 
   p.keyPressed = function() {
