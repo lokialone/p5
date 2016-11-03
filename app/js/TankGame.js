@@ -274,6 +274,8 @@ var TankGame = function(p){
   var heart;
   var scoreSound;
   var lives;
+  var restartButton;
+
   p.preload = function(){
     heart = p.loadImage(require('../img/heart.png'));
     // scoreSound = p.loadSound('../audio/score.mp3');
@@ -296,11 +298,8 @@ var TankGame = function(p){
   }
   p.draw = function() {
     p.background(224);
+
     p.textSize(24);
-
-
-
-
     // 控制tank的方向
     if(p.keyIsDown(p.LEFT_ARROW)) {
       tank.goLeft();
@@ -340,8 +339,13 @@ var TankGame = function(p){
       break;
     }
 
+    if(lives === 0){
+      p.clear();
+      p.textSize(36);
+      p.text("Your Score is: " + score, p.width/2, p.height/2);
+      return;
+    }
     // 判断子弹击中enemyTank
-
     for(var i = 0; i < tank.bullets.length; i++){
       for(var j= 0; j < enemyTank.length;j++){
         if(p.dist(tank.bullets[i].x, tank.bullets[i].y, enemyTank[j].center_x, enemyTank[j].center_y) <=tank.tankWidth/2){
@@ -349,8 +353,13 @@ var TankGame = function(p){
           // scoreSound.play();
           enemyTank.splice(j,1);
         }
-
       }
+    }
+    if (enemyTank.length < 3) {
+      enemyTank.push(new EnemyTank(EDGE_MIN,p.width-EDGE_MIN,p.height-EDGE_MIN));
+      enemyTank[enemyTank.length - 1].setCenter(p.random(EDGE_MIN,p.width-EDGE_MIN),p.random(EDGE_MIN,p.height-EDGE_MIN));
+      enemyTank[enemyTank.length - 1].setDirection(Direction.UP);
+      enemyTank[enemyTank.length - 1].initBullets();
     }
 
     for(var i = 0; i < tank.bullets.length;i++){
@@ -368,6 +377,7 @@ var TankGame = function(p){
       }
     }
   }
+
 
   p.keyPressed = function() {
     if(p.keyCode === p.CONTROL){
