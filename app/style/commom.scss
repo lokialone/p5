@@ -1,0 +1,43 @@
+html{
+    height: 100%;
+  }
+  ul {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    height: 100%;
+  }
+  a{
+    text-decoration: none;
+    color: #333;
+  }
+  .nav{
+    padding-left: 10px
+  }
+  .nav-item{
+    padding-left: 10px;
+  }
+  .nav-item a{
+    height: 30px;
+    line-height: 30px;
+  }
+  .sub-nav{
+    padding-left: 20px;
+  }
+  .container{
+    display: flex;
+    width: 100%;
+    flex-direction: row;
+    height: 100%;
+  }
+  .left-bar{
+    width: 200px;
+    height: 500px;
+    font-size: 16px;
+    color:white;
+  }
+  .content{
+    flex: 1;
+    height: 100%;
+  }
+  

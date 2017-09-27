@@ -1,15 +1,18 @@
+import p5 from 'p5';
 import Router from "./route";
-var p5 = require('p5');
-var shakeball = require('./js/shakeball');
-var flock = require('./js/flock');
-var ball = require('./js/bouncing');
-var acceleration = require('./js/acceleration');
-var freeFall = require('./js/freeFall');
-var friction = require('./js/Friction');
-var Gravitation = require('./js/Gravitation');
-var Attract = require('./js/Attract');
-var Rotate = require('./js/Rotate');
-var TankGame =  require('./js/TankGame');
+// import './style/commom.scss';
+
+import shakeball from './js/shakeball';
+import flock from './js/flock';
+import ball from './js/bouncing';
+import acceleration from './js/acceleration';
+import freeFall from './js/freeFall';
+import friction from './js/Friction';
+import Gravitation from './js/Gravitation';
+import Attract from './js/Attract';
+import Rotate from './js/Rotate';
+import TankGame from './js/TankGame';
+
 var router = new Router();
 router.setup({
   '#/Attract': function(){

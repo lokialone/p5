@@ -8,7 +8,7 @@ const pkg = require('./package.json');
 const PATHS = {
 	app: path.join(__dirname,'app/index.js'),
 	build: path.join(__dirname,'build'),
-	style: path.join(__dirname,'app/style/base.scss'),
+	style: path.join(__dirname,'app/style/base.css'),
 	vendor: Object.keys(pkg.dependencies)
 }
 
@@ -22,7 +22,7 @@ const common = {
 	},
 	module:{
 		loaders:[
-			{ test: /\.css$/, loader: "style!css" },
+			{ test: /\.css$/, loader: "css-loader" },
 			{
 				test: /\.scss$/,
 				loaders: ['style','css','sass']
