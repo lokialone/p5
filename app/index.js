@@ -1,4 +1,4 @@
-var Router = require('./route');
+import Router from "./route";
 var p5 = require('p5');
 var shakeball = require('./js/shakeball');
 var flock = require('./js/flock');
@@ -8,10 +8,8 @@ var freeFall = require('./js/freeFall');
 var friction = require('./js/Friction');
 var Gravitation = require('./js/Gravitation');
 var Attract = require('./js/Attract');
-var Router = require('./route');
 var Rotate = require('./js/Rotate');
 var TankGame =  require('./js/TankGame');
-
 var router = new Router();
 router.setup({
   '#/Attract': function(){

@@ -352,6 +352,7 @@ var TankGame = function(p){
           score++;
           // scoreSound.play();
           enemyTank.splice(j,1);
+          
         }
       }
     }

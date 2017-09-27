@@ -31,6 +31,11 @@ const common = {
 				test: /\.sass$/,
 				loaders: ['style','css','sass']
 			},
+			{ 
+				test: /\.js$/,
+				loader: 'babel-loader',
+				exclude: /node_modules/
+			},
 			{
 			    test: /.*\.(gif|png|jpe?g|svg)$/i,
 			    loader: 'url-loader?limit=8192&name=img/[name].[ext]'
